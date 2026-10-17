@@ -1,0 +1,98 @@
+
+def input_matrix(rows, cols, name):
+    print(f"\nEnter elements of Matrix {name} ({rows}x{cols}):")
+    matrix = []
+
+    for i in range(rows):
+        while True:
+            try:
+                row = list(map(
+                    int, input(f"Row {i + 1}: ").split()
+                ))
+
+                if len(row) != cols:
+                    print(
+                        f"Invalid row length. Please enter exactly {cols} values."
+                    )
+                    continue
+
+                matrix.append(row)
+                break
+
+            except ValueError:
+                print("Invalid input. Please enter integers only.")
+
+    return matrix
+
+
+def add_matrices(A, B):
+    return [
+        [A[i][j] + B[i][j] for j in range(len(A[0]))]
+        for i in range(len(A))
+    ]
+
+
+def multiply_matrices(A, B):
+    result = []
+
+    for i in range(len(A)):
+        row = []
+
+        for j in range(len(B[0])):
+            product = sum(
+                A[i][k] * B[k][j]
+                for k in range(len(B))
+            )
+            row.append(product)
+
+        result.append(row)
+
+    return result
+
+
+def main():
+    try:
+        r1 = int(input("Enter number of rows for Matrix A: "))
+        c1 = int(input("Enter number of columns for Matrix A: "))
+        r2 = int(input("Enter number of rows for Matrix B: "))
+        c2 = int(input("Enter number of columns for Matrix B: "))
+
+        if min(r1, c1, r2, c2) <= 0:
+            print("Rows and columns must be positive integers.")
+            return
+
+        A = input_matrix(r1, c1, 'A')
+        B = input_matrix(r2, c2, 'B')
+
+        # Matrix addition
+        if r1 == r2 and c1 == c2:
+            print("\nMatrix Addition (A + B):")
+            sum_result = add_matrices(A, B)
+
+            for row in sum_result:
+                print(row)
+        else:
+            print(
+                "\nMatrix addition not possible "
+                "(incompatible dimensions)."
+            )
+
+        # Matrix multiplication
+        if c1 == r2:
+            print("\nMatrix Multiplication (A x B):")
+            product_result = multiply_matrices(A, B)
+
+            for row in product_result:
+                print(row)
+        else:
+            print(
+                "\nMatrix multiplication not possible "
+                "(columns of A must equal rows of B)."
+            )
+
+    except ValueError:
+        print("Invalid input. Please enter integers only.")
+
+
+if __name__ == '__main__':
+    main()
